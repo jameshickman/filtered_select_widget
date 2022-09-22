@@ -1,0 +1,44 @@
+.select-widget__container {
+    display: block;
+    position: relative;
+}
+
+.select-widget__display-current {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.select-widget__dropdown-container {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: white;
+    border: 1px solid black;
+    padding: 1rem;
+    z-index: 99999;
+}
+
+.select-widget__input-text {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.select-widget__results {
+    max-height: 10rem;
+    overflow-y: auto;
+}
+
+.select-widget__item {
+    cursor: pointer;
+}
+
+.select-widget__group-title {
+    font-weight: bold;
+}
+
+.select-widget__group-item {
+    padding-left: 1rem;
+    cursor: pointer;
+}
