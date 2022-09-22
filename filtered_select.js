@@ -17,6 +17,7 @@ function _filtered_select(el_container) {
     }
 
     function load_options_data() {
+        options = [];
         if (has_groups) {
             for (let i = 0; i < els_optgroups.length; i++) {
                 const group_name = els_optgroups[i].label;
@@ -179,4 +180,10 @@ function _filtered_select(el_container) {
 
     document.addEventListener('click', background_clicked);
     widget.widget.addEventListener('click', widget_clicked);
+
+    this.refresh = function() {
+        load_options_data();
+    }
+
+    return this;
 }
