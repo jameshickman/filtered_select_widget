@@ -32,6 +32,12 @@
 
 .select-widget__item {
     cursor: pointer;
+    border: 1px solid white;
+}
+
+.select-widget__item:hover {
+    cursor: pointer;
+    border: 1px solid black;
 }
 
 .select-widget__group-title {
@@ -41,4 +47,11 @@
 .select-widget__group-item {
     padding-left: 1rem;
     cursor: pointer;
+    border: 1px solid white;
+}
+
+.select-widget__group-item:hover {
+    padding-left: 1rem;
+    cursor: pointer;
+    border: 1px solid black;
 }
