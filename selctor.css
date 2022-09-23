@@ -9,6 +9,7 @@
     background-color: white;
     text-align: left;
     width: 100%;
+    box-sizing: border-box;
     cursor: pointer;
 }
 
@@ -32,21 +33,31 @@
 .select-widget__results {
     max-height: 10rem;
     overflow-y: auto;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 .select-widget__item {
     background-color: white;
     width: 100%;
+    box-sizing: border-box;
     text-align: left;
     cursor: pointer;
-    border: 1px solid white;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border: 1px solid transparent;
 }
 
 .select-widget__item:hover {
     background-color: white;
     width: 100%;
+    box-sizing: border-box;
     text-align: left;
     cursor: pointer;
+    margin-top: 1px;
+    margin-bottom: 1px;
     border: 1px solid black;
 }
 
@@ -59,8 +70,11 @@
     cursor: pointer;
     background-color: white;
     width: 100%;
+    box-sizing: border-box;
     text-align: left;
-    border: 1px solid white;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border: 1px solid transparent;
 }
 
 .select-widget__group-item:hover {
@@ -68,6 +82,9 @@
     cursor: pointer;
     background-color: white;
     width: 100%;
+    box-sizing: border-box;
     text-align: left;
+    margin-top: 1px;
+    margin-bottom: 1px;
     border: 1px solid black;
 }
