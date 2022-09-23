@@ -130,8 +130,8 @@ function _filtered_select(el_container) {
     }
 
     function result_clicked(e) {
-        const val = e.originalTarget.dataset.value;
-        const txt = e.originalTarget.innerText;
+        const val = e.target.dataset.value;
+        const txt = e.target.innerText;
         if (val !== undefined) {
             el_select.value = val;
             el_display.innerText = txt;
