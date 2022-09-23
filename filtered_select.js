@@ -6,7 +6,7 @@ function _filtered_select(el_container) {
 
     const el_select = el_container.querySelector('SELECT');
     const els_optgroups = el_select.querySelectorAll('OPTGROUP');
-    const el_display = document.createElement('DIV');
+    const el_display = document.createElement('BUTTON');
     el_display.classList.add('select-widget__display-current');
     el_display.innerText = el_select.options[el_select.selectedIndex].text;
     el_container.appendChild(el_display);
@@ -75,7 +75,7 @@ function _filtered_select(el_container) {
                 const el_options_container = document.createElement('DIV');
                 el_group_container.appendChild(el_options_container);
                 for (let j = 0; j < results[i].options.length; j++) {
-                    const el_option = document.createElement('DIV');
+                    const el_option = document.createElement('BUTTON');
                     el_option.classList.add('select-widget__group-item');
                     el_option.innerText = results[i].options[j].label;
                     el_option.dataset['value'] = results[i].options[j].value;
@@ -86,7 +86,7 @@ function _filtered_select(el_container) {
         }
         else {
             for (let i = 0; i < results.length; i++) {
-                const el_option = document.createElement('DIV');
+                const el_option = document.createElement('BUTTON');
                 el_option.classList.add('select-widget__item');
                 el_option.innerText = results[i].label;
                 el_option.dataset['value'] = results[i].value;
