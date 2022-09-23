@@ -5,15 +5,22 @@ function _filtered_select(el_container) {
     let options = [];
 
     const el_select = el_container.querySelector('SELECT');
-    const els_optgroups = el_select.querySelectorAll('OPTGROUP');
+    let els_optgroups = [];
     const el_display = document.createElement('BUTTON');
     el_display.classList.add('select-widget__display-current');
     el_display.innerText = el_select.options[el_select.selectedIndex].text;
     el_container.appendChild(el_display);
     el_select.style.display = 'none';
     const widget = build_widget();
-    if (els_optgroups !== null && els_optgroups.length > 0) {
-        has_groups = true;
+
+    function group_test() {
+        els_optgroups = el_select.querySelectorAll('OPTGROUP');
+        if (els_optgroups !== null && els_optgroups.length > 0) {
+            has_groups = true;
+        }
+        else {
+            has_groups = false;
+        }
     }
 
     function load_options_data() {
@@ -173,6 +180,7 @@ function _filtered_select(el_container) {
         };
     }
 
+    group_test();
     load_options_data();
     el_container.appendChild(widget.widget);
 
@@ -181,7 +189,8 @@ function _filtered_select(el_container) {
     document.addEventListener('click', background_clicked);
     widget.widget.addEventListener('click', widget_clicked);
 
-    this.refresh = function() {
+    this.reload = function() {
+        group_test();
         load_options_data();
     }
 
