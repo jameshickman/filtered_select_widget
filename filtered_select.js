@@ -197,6 +197,7 @@ function _filtered_select(el_container) {
     el_container.appendChild(widget.widget);
 
     el_display.addEventListener('click', activate_dropdown);
+    el_down_chevron.addEventListener('click', activate_dropdown);
 
     document.addEventListener('click', background_clicked);
     widget.widget.addEventListener('click', widget_clicked);
