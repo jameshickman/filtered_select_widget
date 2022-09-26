@@ -3,14 +3,18 @@ function _filtered_select(el_container) {
     let has_groups = false;
     let opened = false;
     let options = [];
+    let selected = null;
 
     const el_select = el_container.querySelector('SELECT');
+    el_select.style.display = 'none';
     let els_optgroups = [];
     const el_display = document.createElement('BUTTON');
     el_display.classList.add('select-widget__display-current');
     el_display.innerText = el_select.options[el_select.selectedIndex].text;
     el_container.appendChild(el_display);
-    el_select.style.display = 'none';
+    const el_down_chevron = document.createElement('DIV');
+    el_down_chevron.classList.add('select-widget__chevron');
+    el_container.appendChild(el_down_chevron);
     const widget = build_widget();
 
     function group_test() {
@@ -25,6 +29,7 @@ function _filtered_select(el_container) {
 
     function load_options_data() {
         options = [];
+        selected = el_select.options[el_select.selectedIndex].value;
         if (has_groups) {
             for (let i = 0; i < els_optgroups.length; i++) {
                 const group_name = els_optgroups[i].label;
@@ -86,6 +91,9 @@ function _filtered_select(el_container) {
                     el_option.classList.add('select-widget__group-item');
                     el_option.innerText = results[i].options[j].label;
                     el_option.dataset['value'] = results[i].options[j].value;
+                    if (results[i].options[j].value == selected) {
+                        el_display.innerText = results[i].options[j].label;
+                    }
                     el_options_container.appendChild(el_option);
                 }
                 widget.result.appendChild(el_group_container);
@@ -164,6 +172,8 @@ function _filtered_select(el_container) {
         const el_widget = document.createElement('DIV');
         el_widget.classList.add('select-widget__dropdown-container');
         el_widget.style.display = 'none';
+        const el_close = document.createElement('BUTTON');
+        el_close.classList.add('select-widget__dropdown-close');
         const el_search = document.createElement('INPUT');
         el_search.type = 'TEXT';
         el_search.classList.add('select-widget__input-text');
@@ -171,12 +181,14 @@ function _filtered_select(el_container) {
         const el_results = document.createElement('DIV');
         el_results.classList.add('select-widget__results');
         el_results.addEventListener('click', result_clicked);
+        el_widget.appendChild(el_close);
         el_widget.appendChild(el_search);
         el_widget.appendChild(el_results);
         return {
             'widget': el_widget,
             'search': el_search,
-            'result': el_results
+            'result': el_results,
+            'close': el_close
         };
     }
 
@@ -188,10 +200,14 @@ function _filtered_select(el_container) {
 
     document.addEventListener('click', background_clicked);
     widget.widget.addEventListener('click', widget_clicked);
+    widget.close.addEventListener('click', function(e) {
+        widget.widget.style['display'] = 'none';
+    });
 
     this.reload = function() {
         group_test();
         load_options_data();
+        build_results(options);
     }
 
     return this;
