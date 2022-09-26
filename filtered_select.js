@@ -29,7 +29,6 @@ function _filtered_select(el_container) {
 
     function load_options_data() {
         options = [];
-        selected = el_select.options[el_select.selectedIndex].value;
         if (has_groups) {
             for (let i = 0; i < els_optgroups.length; i++) {
                 const group_name = els_optgroups[i].label;
@@ -75,6 +74,7 @@ function _filtered_select(el_container) {
     }
 
     function build_results(results) {
+        selected = el_select.options[el_select.selectedIndex].value;
         widget.result.innerHTML = '';
         if (has_groups) {
             for (let i = 0; i < results.length; i++) {
