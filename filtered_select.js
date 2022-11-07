@@ -76,7 +76,9 @@ function _filtered_select(el_container) {
     }
 
     function build_results(results) {
-        selected = el_select.options[el_select.selectedIndex].value;
+        if (el_select.selectedIndex >= 0) {
+            selected = el_select.options[el_select.selectedIndex].value;
+        }
         widget.result.innerHTML = '';
         if (has_groups) {
             for (let i = 0; i < results.length; i++) {
