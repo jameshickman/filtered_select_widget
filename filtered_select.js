@@ -10,7 +10,9 @@ function _filtered_select(el_container) {
     let els_optgroups = [];
     const el_display = document.createElement('BUTTON');
     el_display.classList.add('select-widget__display-current');
-    el_display.innerText = el_select.options[el_select.selectedIndex].text;
+    if (el_select.selectedIndex >= 0) {
+        el_display.innerText = el_select.options[el_select.selectedIndex].text;
+    }
     el_container.appendChild(el_display);
     const el_down_chevron = document.createElement('DIV');
     el_down_chevron.classList.add('select-widget__chevron');
