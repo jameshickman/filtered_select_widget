@@ -5,6 +5,12 @@
         <link rel="stylesheet" href="selctor.css" />
         <script>
             window.addEventListener('load', function(){
+                document.querySelector('#select-control').addEventListener('change', function(e) {
+                    alert("Select 1 changed");
+                });
+                document.querySelector('#select-control-groups').addEventListener('change', function(e) {
+                    alert("Select 2 changed");
+                });
                 _filtered_select(document.querySelector(".select-container-simple"));
                 _filtered_select(document.querySelector(".select-container-groups"));
             });

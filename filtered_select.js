@@ -153,6 +153,15 @@ function _filtered_select(el_container) {
         }
         widget.widget.style.display = 'none';
         opened = false;
+        // Simulate the Change event and dispatch it from the real SELECT
+        if ("createEvent" in document) {
+            const evt = document.createEvent('HTMLEvents');
+            evt.initEvent("change", false, true);
+            el_select.dispatchEvent(evt);
+        }
+        else {
+            el_select.fireEvebt("onchange");
+        }
     }
 
     function background_clicked(e) {
