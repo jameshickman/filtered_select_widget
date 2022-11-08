@@ -110,6 +110,9 @@ function _filtered_select(el_container) {
                 el_option.innerText = results[i].label;
                 el_option.dataset['value'] = results[i].value;
                 widget.result.appendChild(el_option);
+                if (results[i].value == selected) {
+                    el_display.innerText = results[i].label;
+                }
             }
         }
     }
