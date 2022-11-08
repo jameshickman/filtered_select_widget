@@ -222,6 +222,7 @@ function _filtered_select(el_container) {
     });
 
     this.reload = function() {
+        el_display.innerText = '';
         group_test();
         load_options_data();
         build_results(options);
