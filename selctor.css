@@ -13,16 +13,25 @@
     cursor: pointer;
 }
 
+.select-widget__chevron-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    padding-right: 0.3rem;
+    width: 0.6rem;
+}
+
 .select-widget__chevron {
     display: block;
-    position: absolute;
     width: 0px;
     height: 0px;
     border-left: 0.3rem solid transparent;
     border-right: 0.3rem solid transparent;
     border-top: 0.3rem solid black;
-    top: 0.6rem;
-    right: 0.5rem;
 }
 
 .select-widget__dropdown-container {
