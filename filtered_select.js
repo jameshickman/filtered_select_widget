@@ -4,7 +4,6 @@ function _filtered_select(el_container) {
     let opened = false;
     let options = [];
     let selected = null;
-
     const el_select = el_container.querySelector('SELECT');
     el_select.style.display = 'none';
     let els_optgroups = [];
@@ -14,14 +13,12 @@ function _filtered_select(el_container) {
         el_display.innerText = el_select.options[el_select.selectedIndex].text;
     }
     el_container.appendChild(el_display);
-
     const el_down_chevron_container = document.createElement('DIV');
     el_down_chevron_container.classList.add('select-widget__chevron-container');
     const el_down_chevron = document.createElement('DIV');
     el_down_chevron.classList.add('select-widget__chevron');
     el_down_chevron_container.appendChild(el_down_chevron);
     el_container.appendChild(el_down_chevron_container);
-    
     const widget = build_widget();
 
     function group_test() {
@@ -178,7 +175,7 @@ function _filtered_select(el_container) {
             el_select.dispatchEvent(evt);
         }
         else {
-            el_select.fireEvebt("onchange");
+            el_select.fireEvent("onchange");
         }
     }
 
