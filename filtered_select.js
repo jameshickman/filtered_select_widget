@@ -102,6 +102,7 @@ function _filtered_select(el_container) {
                     el_option.dataset['value'] = results[i].options[j].value;
                     if (results[i].options[j].value == selected) {
                         el_display.innerText = results[i].options[j].label;
+                        el_option.classList.add('select-widget__item__selected');
                     }
                     el_options_container.appendChild(el_option);
                 }
@@ -114,10 +115,11 @@ function _filtered_select(el_container) {
                 el_option.classList.add('select-widget__item');
                 el_option.innerText = results[i].label;
                 el_option.dataset['value'] = results[i].value;
-                widget.result.appendChild(el_option);
                 if (results[i].value == selected) {
                     el_display.innerText = results[i].label;
+                    el_option.classList.add('select-widget__item__selected');
                 }
+                widget.result.appendChild(el_option);
             }
         }
     }
