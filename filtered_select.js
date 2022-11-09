@@ -124,7 +124,7 @@ function _filtered_select(el_container) {
         }
         const el_selected_item = widget.result.querySelector('.select-widget__item__selected');
         if (el_selected_item) {
-            widget.result.scrollTop = el_selected_item.offsetTop;
+            widget.result.scrollTop = el_selected_item.offsetTop - el_selected_item.clientHeight;
         }
     }
 
