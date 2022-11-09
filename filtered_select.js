@@ -122,6 +122,10 @@ function _filtered_select(el_container) {
                 widget.result.appendChild(el_option);
             }
         }
+        const el_selected_item = widget.result.querySelector('.select-widget__item__selected');
+        if (el_selected_item) {
+            widget.result.scrollTop = el_selected_item.offsetTop;
+        }
     }
 
     function search_changed(e) {
