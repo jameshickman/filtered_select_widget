@@ -198,6 +198,7 @@ function _filtered_select(el_container) {
         const el_search = document.createElement('INPUT');
         el_search.type = 'TEXT';
         el_search.classList.add('select-widget__input-text');
+        el_search.placeholder = "Search...";
         el_search.addEventListener('keyup', search_changed);
         const el_results = document.createElement('DIV');
         el_results.classList.add('select-widget__results');
