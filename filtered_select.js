@@ -124,9 +124,10 @@ function _filtered_select(el_container) {
             let backoff = el_selected_item.offsetTop - el_selected_item.clientHeight;
             if (has_groups) {
                 const idx = Array.from(el_selected_item.parentElement.children).indexOf(el_selected_item);
-                if (idx == 0) {
+                if (idx <= 3) {
                     const heading = el_selected_item.parentElement.parentElement.querySelector('.select-widget__group-title');
-                    backoff -= heading.clientHeight;
+                    const first_item = el_selected_item.parentElement.children[0];
+                    backoff = first_item.offsetTop - first_item.clientHeight - heading.clientHeight;
                 }
             }
             widget.result.scrollTop = backoff;
