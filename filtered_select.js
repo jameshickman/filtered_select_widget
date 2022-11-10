@@ -230,6 +230,12 @@ function _filtered_select(el_container) {
         widget.widget.style['display'] = 'none';
     });
 
+    document.addEventListener('keyup', function(e){
+        if (e.which == 27 || e.key == "Escape") {
+            background_clicked(e);
+        }
+    });
+
     this.reload = function() {
         el_display.innerText = '';
         group_test();
