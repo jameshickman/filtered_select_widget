@@ -252,5 +252,7 @@ function _filtered_select(el_container) {
         build_results(options);
     }
 
+    el_select.widget = this;
+
     return this;
 }
