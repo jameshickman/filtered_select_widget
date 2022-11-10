@@ -121,7 +121,15 @@ function _filtered_select(el_container) {
         }
         const el_selected_item = widget.result.querySelector('.select-widget__item__selected');
         if (el_selected_item) {
-            widget.result.scrollTop = el_selected_item.offsetTop - el_selected_item.clientHeight;
+            let backoff = el_selected_item.offsetTop - el_selected_item.clientHeight;
+            if (has_groups) {
+                const idx = Array.from(el_selected_item.parentElement.children).indexOf(el_selected_item);
+                if (idx == 0) {
+                    const heading = el_selected_item.parentElement.parentElement.querySelector('.select-widget__group-title');
+                    backoff -= heading.clientHeight;
+                }
+            }
+            widget.result.scrollTop = backoff;
         }
     }
 
