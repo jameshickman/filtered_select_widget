@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtered Select - Modern ES6 Custom Element Demo</title>
+  <script src="filtered-select-element.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .demo-section {
+      margin-bottom: 30px;
+      border: 1px solid #eee;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    
+    h2 {
+      margin-top: 0;
+    }
+    
+    .code-example {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    
+    filtered-select {
+      margin-bottom: 20px;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Filtered Select - Modern ES6 Custom Element Demo</h1>
+  
+  <div class="demo-section">
+    <h2>Basic Select</h2>
+    
+    <div class="code-example">
+&lt;filtered-select&gt;
+  &lt;select id="basic-select"&gt;
+    &lt;option value="1"&gt;One&lt;/option&gt;
+    &lt;option value="2"&gt;Two&lt;/option&gt;
+    &lt;option value="3"&gt;Three&lt;/option&gt;
+    &lt;option value="4"&gt;Four&lt;/option&gt;
+    &lt;option value="5"&gt;Five&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/filtered-select&gt;
+    </div>
+    
+    <filtered-select>
+      <select id="basic-select">
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+        <option value="4">Four</option>
+        <option value="5">Five</option>
+      </select>
+    </filtered-select>
+    
+    <div id="basic-select-output">Selected: None</div>
+  </div>
+  
+  <div class="demo-section">
+    <h2>Grouped Select</h2>
+    
+    <div class="code-example">
+&lt;filtered-select&gt;
+  &lt;select id="grouped-select"&gt;
+    &lt;optgroup label="Numbers"&gt;
+      &lt;option value="1"&gt;One&lt;/option&gt;
+      &lt;option value="2"&gt;Two&lt;/option&gt;
+      &lt;option value="3"&gt;Three&lt;/option&gt;
+    &lt;/optgroup&gt;
+    &lt;optgroup label="Letters"&gt;
+      &lt;option value="A" selected="selected"&gt;Alpha&lt;/option&gt;
+      &lt;option value="B"&gt;Bravo&lt;/option&gt;
+      &lt;option value="C"&gt;Charlie&lt;/option&gt;
+    &lt;/optgroup&gt;
+  &lt;/select&gt;
+&lt;/filtered-select&gt;
+    </div>
+    
+    <filtered-select>
+      <select id="grouped-select">
+        <optgroup label="Numbers">
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </optgroup>
+        <optgroup label="Letters">
+          <option value="A" selected="selected">Alpha</option>
+          <option value="B">Bravo</option>
+          <option value="C">Charlie</option>
+        </optgroup>
+      </select>
+    </filtered-select>
+    
+    <div id="grouped-select-output">Selected: None</div>
+  </div>
+  
+  <div class="demo-section">
+    <h2>Dynamic Option Update Example</h2>
+    
+    <div class="code-example">
+&lt;filtered-select id="dynamic-select-container"&gt;
+  &lt;select id="dynamic-select"&gt;
+    &lt;option value="1"&gt;Original Option 1&lt;/option&gt;
+    &lt;option value="2"&gt;Original Option 2&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/filtered-select&gt;
+
+&lt;button id="update-options-btn"&gt;Update Options&lt;/button&gt;
+
+&lt;script&gt;
+  document.getElementById('update-options-btn').addEventListener('click', function() {
+    // Get the select element
+    const select = document.getElementById('dynamic-select');
+    
+    // Clear existing options
+    select.innerHTML = '';
+    
+    // Add new options
+    const newOptions = [
+      { value: 'new1', text: 'New Option 1' },
+      { value: 'new2', text: 'New Option 2' },
+      { value: 'new3', text: 'New Option 3' }
+    ];
+    
+    newOptions.forEach(option => {
+      const optElement = document.createElement('option');
+      optElement.value = option.value;
+      optElement.textContent = option.text;
+      select.appendChild(optElement);
+    });
+    
+    // Reload the filtered-select
+    document.getElementById('dynamic-select-container').reload();
+  });
+&lt;/script&gt;
+    </div>
+    
+    <filtered-select id="dynamic-select-container">
+      <select id="dynamic-select">
+        <option value="1">Original Option 1</option>
+        <option value="2">Original Option 2</option>
+      </select>
+    </filtered-select>
+    
+    <button id="update-options-btn">Update Options</button>
+    
+    <div id="dynamic-select-output">Selected: None</div>
+  </div>
+  
+  <script>
+    // Setup event listeners for the demos
+    document.getElementById('basic-select').addEventListener('change', function(e) {
+      document.getElementById('basic-select-output').textContent = 
+        'Selected: ' + e.target.options[e.target.selectedIndex].text;
+    });
+    
+    document.getElementById('grouped-select').addEventListener('change', function(e) {
+      document.getElementById('grouped-select-output').textContent = 
+        'Selected: ' + e.target.options[e.target.selectedIndex].text;
+    });
+    
+    document.getElementById('dynamic-select').addEventListener('change', function(e) {
+      document.getElementById('dynamic-select-output').textContent = 
+        'Selected: ' + e.target.options[e.target.selectedIndex].text;
+    });
+    
+    // Implementation for the dynamic update example
+    document.getElementById('update-options-btn').addEventListener('click', function() {
+      // Get the select element
+      const select = document.getElementById('dynamic-select');
+      
+      // Clear existing options
+      select.innerHTML = '';
+      
+      // Add new options
+      const newOptions = [
+        { value: 'new1', text: 'New Option 1' },
+        { value: 'new2', text: 'New Option 2' },
+        { value: 'new3', text: 'New Option 3' }
+      ];
+      
+      newOptions.forEach(option => {
+        const optElement = document.createElement('option');
+        optElement.value = option.value;
+        optElement.textContent = option.text;
+        select.appendChild(optElement);
+      });
+      
+      // Reload the filtered-select
+      const container = document.getElementById('dynamic-select-container');
+      if (container.tagName === 'FILTERED-SELECT') {
+        container.reload();
+      } else {
+        // Fallback in case we're getting the element instead of the custom element
+        const widget = container.querySelector('select').widget;
+        if (widget && typeof widget.reload === 'function') {
+          widget.reload();
+        }
+      }
+    });
+    
+    // Set initial values for selected outputs
+    window.addEventListener('load', function() {
+      const basicSelect = document.getElementById('basic-select');
+      if (basicSelect.selectedIndex >= 0) {
+        document.getElementById('basic-select-output').textContent = 
+          'Selected: ' + basicSelect.options[basicSelect.selectedIndex].text;
+      }
+      
+      const groupedSelect = document.getElementById('grouped-select');
+      if (groupedSelect.selectedIndex >= 0) {
+        document.getElementById('grouped-select-output').textContent = 
+          'Selected: ' + groupedSelect.options[groupedSelect.selectedIndex].text;
+      }
+      
+      const dynamicSelect = document.getElementById('dynamic-select');
+      if (dynamicSelect.selectedIndex >= 0) {
+        document.getElementById('dynamic-select-output').textContent = 
+          'Selected: ' + dynamicSelect.options[dynamicSelect.selectedIndex].text;
+      }
+    });
+  </script>
+</body>
+</html>
