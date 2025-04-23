@@ -5,48 +5,22 @@
  * Copyright 2022-2025. Omer James Hickman.
  * Released under the GNU LGPL V2
  */
-class FilteredSelect extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.hasGroups = false;
-    this.opened = false;
-    this.options = [];
-    this.selected = null;
-    this.elSelect = null;
-    
-    // Bind methods to this
-    this.handleDisplayClick = this.handleDisplayClick.bind(this);
-    this.handleChevronClick = this.handleChevronClick.bind(this);
-    this.handleBackgroundClick = this.handleBackgroundClick.bind(this);
-    this.handleWidgetClick = this.handleWidgetClick.bind(this);
-    this.handleCloseClick = this.handleCloseClick.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.handleResultClick = this.handleResultClick.bind(this);
-    this.handleResultScroll = this.handleResultScroll.bind(this);
-    this.handleKeyup = this.handleKeyup.bind(this);
-  }
 
-  connectedCallback() {
-    // Render initial HTML
-    this.render();
-    
-    // Initialize the component after rendering
-    this.initializeSelect();
-    
-    // Add event listeners
-    this.addEventListeners();
-  }
+// Import theme if in CommonJS environment
+let FilteredSelectDefaultTheme;
+let createFilteredSelectTheme;
 
-  disconnectedCallback() {
-    // Clean up event listeners
-    this.removeEventListeners();
-  }
-
-  render() {
-    // Prepare the HTML structure and styles
-    this.shadowRoot.innerHTML = `
-      <style>
+// Check if we're in a module context
+if (typeof require !== 'undefined') {
+  const themeModule = require('./template.js');
+  FilteredSelectDefaultTheme = themeModule.FilteredSelectDefaultTheme;
+  createFilteredSelectTheme = themeModule.createFilteredSelectTheme;
+} else {
+  // In browser, these should be globally available
+  // If not defined, we'll use a minimal default theme
+  FilteredSelectDefaultTheme = window.FilteredSelectDefaultTheme || {
+    generateStyles: function() {
+      return `
         :host {
           display: block;
           position: relative;
@@ -200,11 +174,122 @@ class FilteredSelect extends HTMLElement {
         ::slotted(select) {
           display: none;
         }
+      `;
+    }
+  };
+  
+  createFilteredSelectTheme = window.createFilteredSelectTheme || function(customTheme) {
+    return FilteredSelectDefaultTheme;
+  };
+}
+
+class FilteredSelect extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.hasGroups = false;
+    this.opened = false;
+    this.options = [];
+    this.selected = null;
+    this.elSelect = null;
+    
+    // Get theme from attribute or use default
+    this._theme = FilteredSelectDefaultTheme;
+    
+    // Bind methods to this
+    this.handleDisplayClick = this.handleDisplayClick.bind(this);
+    this.handleChevronClick = this.handleChevronClick.bind(this);
+    this.handleBackgroundClick = this.handleBackgroundClick.bind(this);
+    this.handleWidgetClick = this.handleWidgetClick.bind(this);
+    this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleResultClick = this.handleResultClick.bind(this);
+    this.handleResultScroll = this.handleResultScroll.bind(this);
+    this.handleKeyup = this.handleKeyup.bind(this);
+  }
+
+  // Add setTheme method to the prototype
+  setTheme(theme) {
+    if (typeof theme === 'string') {
+      // Check if the named theme exists in the window
+      if (window[theme]) {
+        this._theme = window[theme];
+      } else {
+        console.warn(`Theme "${theme}" not found. Using default theme.`);
+        this._theme = FilteredSelectDefaultTheme;
+      }
+    } else if (typeof theme === 'object') {
+      // Custom theme object provided
+      this._theme = createFilteredSelectTheme(theme);
+    } else {
+      // Default
+      this._theme = FilteredSelectDefaultTheme;
+    }
+    
+    // Re-render with new theme
+    this.updateStyles();
+  }
+  
+  // Method to update just the styles without re-rendering everything
+  updateStyles() {
+    const styleEl = this.shadowRoot.querySelector('style');
+    if (styleEl) {
+      styleEl.textContent = this._theme.generateStyles();
+    }
+  }
+
+  static get observedAttributes() {
+    return ['theme', 'placeholder', 'disabled'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'theme' && oldValue !== newValue) {
+      this.setTheme(newValue);
+    }
+    
+    if (name === 'placeholder' && this.elSearch) {
+      this.elSearch.placeholder = newValue || 'Search...';
+    }
+    
+    if (name === 'disabled') {
+      const isDisabled = newValue !== null;
+      if (this.elDisplay) {
+        this.elDisplay.disabled = isDisabled;
+      }
+    }
+  }
+
+  connectedCallback() {
+    // Check for theme attribute
+    if (this.hasAttribute('theme')) {
+      this.setTheme(this.getAttribute('theme'));
+    }
+    
+    // Render initial HTML
+    this.render();
+    
+    // Initialize the component after rendering
+    this.initializeSelect();
+    
+    // Add event listeners
+    this.addEventListeners();
+  }
+
+  disconnectedCallback() {
+    // Clean up event listeners
+    this.removeEventListeners();
+  }
+
+  render() {
+    // Prepare the HTML structure and styles
+    this.shadowRoot.innerHTML = `
+      <style>
+        ${this._theme.generateStyles()}
       </style>
       
       <slot></slot>
       
-      <button class="select-widget__display-current"></button>
+      <button class="select-widget__display-current" ${this.hasAttribute('disabled') ? 'disabled' : ''}></button>
       
       <div class="select-widget__chevron-container">
         <div class="select-widget__chevron"></div>
@@ -212,7 +297,7 @@ class FilteredSelect extends HTMLElement {
       
       <div class="select-widget__dropdown-container">
         <button class="select-widget__dropdown-close"></button>
-        <input type="text" class="select-widget__input-text" placeholder="Search...">
+        <input type="text" class="select-widget__input-text" placeholder="${this.getAttribute('placeholder') || 'Search...'}">
         <div class="select-widget__group-label"></div>
         <div class="select-widget__results"></div>
       </div>
@@ -322,11 +407,15 @@ class FilteredSelect extends HTMLElement {
   }
 
   handleDisplayClick(e) {
-    this.activateDropdown(e);
+    if (!this.hasAttribute('disabled')) {
+      this.activateDropdown(e);
+    }
   }
 
   handleChevronClick(e) {
-    this.activateDropdown(e);
+    if (!this.hasAttribute('disabled')) {
+      this.activateDropdown(e);
+    }
   }
 
   handleBackgroundClick(e) {

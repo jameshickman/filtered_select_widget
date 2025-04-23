@@ -48,8 +48,12 @@ This library is available in two implementations:
 
 ### Modern ES6 Custom Element
 
-1. Include the custom element script:
+1. Include the required scripts:
    ```html
+   <!-- Include the theme system (optional but recommended) -->
+   <script src="template.js"></script>
+   
+   <!-- Include the custom element -->
    <script src="filtered-select-element.js"></script>
    ```
 
@@ -62,6 +66,33 @@ This library is available in two implementations:
        <!-- More options... -->
      </select>
    </filtered-select>
+   ```
+
+3. Optional: Apply a theme by attribute or JavaScript:
+   ```html
+   <!-- Using attribute -->
+   <filtered-select theme="FilteredSelectDarkTheme">
+     <select id="my-select">
+       <!-- Options... -->
+     </select>
+   </filtered-select>
+   
+   <!-- Using JavaScript -->
+   <script>
+     // Get reference to the element
+     const select = document.querySelector('filtered-select');
+     
+     // Apply a predefined theme
+     select.setTheme(FilteredSelectDarkTheme);
+     
+     // Or create a custom theme
+     select.setTheme(createFilteredSelectTheme({
+       backgroundColor: '#f5f5f5',
+       borderColor: '#0066cc',
+       selectedBgColor: '#0066cc',
+       borderRadius: '4px'
+     }));
+   </script>
    ```
 
 ## Examples
@@ -153,6 +184,55 @@ const widgetController = _filtered_select(containerElement);
 #### Methods
 
 - `filteredSelectElement.reload()`: Reloads the options from the select element (useful after dynamically changing options)
+- `filteredSelectElement.setTheme(theme)`: Sets the theme for the component. Can accept a theme name, a theme object, or a custom theme object.
+
+#### Attributes
+
+- `theme`: Sets the name of a predefined theme to use (e.g., "FilteredSelectDarkTheme")
+- `placeholder`: Sets the placeholder text for the search input (default: "Search...")
+- `disabled`: When present, disables the select dropdown
+
+### Theming System
+
+The modern implementation includes a powerful theming system that allows complete customization of the component's appearance.
+
+#### Predefined Themes
+
+- `FilteredSelectDefaultTheme`: The default light theme
+- `FilteredSelectDarkTheme`: A dark theme with light text
+- `FilteredSelectRoundedTheme`: A theme with rounded corners and blue accents
+
+#### Creating Custom Themes
+
+```javascript
+// Import the theming utilities
+// This is done automatically in the browser when you include template.js
+
+// Create a custom theme by extending the default theme
+const myCustomTheme = createFilteredSelectTheme({
+  // Override only the properties you want to change
+  backgroundColor: '#f0f0f0',
+  textColor: '#333',
+  borderColor: '#0066cc',
+  hoverBorderColor: '#004499',
+  selectedBgColor: '#0066cc',
+  selectedTextColor: 'white',
+  
+  // Customize sizes and shapes
+  borderRadius: '4px',
+  fontSize: '16px',
+  maxHeight: '15rem',
+  
+  // Add shadows
+  dropdownShadow: '0 4px 8px rgba(0,0,0,0.1)',
+  
+  // Add transitions
+  transitionSpeed: '0.3s'
+});
+
+// Apply the theme to a select element
+document.querySelector('filtered-select').setTheme(myCustomTheme);
+```
 
 ```javascript
 // Example of dynamically changing options and reloading
@@ -178,6 +258,7 @@ document.querySelector('#my-select').addEventListener('change', function(e) {
 
 - `index.html`: Demo of the traditional implementation
 - `modern-demo.html`: Demo of the modern ES6 custom element implementation
+- `themed-demo.html`: Demo of the theming capabilities with various examples
 
 ## Testing
 
