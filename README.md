@@ -179,6 +179,40 @@ document.querySelector('#my-select').addEventListener('change', function(e) {
 - `index.html`: Demo of the traditional implementation
 - `modern-demo.html`: Demo of the modern ES6 custom element implementation
 
+## Testing
+
+This project includes comprehensive test coverage for both implementations using NightwatchJS.
+
+### Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Start the HTTP server in a separate terminal
+npm run http-server
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run only traditional implementation tests
+npm run test:traditional
+
+# Run only modern implementation tests
+npm run test:modern
+```
+
+The tests cover:
+- Basic functionality of both implementations
+- Option selection
+- Search filtering
+- Group handling
+- Dynamic option updates (for the modern implementation)
+
 ## Browser Compatibility
 
 - Traditional Implementation: Compatible with all modern browsers

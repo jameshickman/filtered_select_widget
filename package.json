@@ -1,0 +1,29 @@
+{
+  "name": "filtered-select",
+  "version": "1.0.0",
+  "description": "A customizable, searchable select dropdown component",
+  "main": "filtered_select.js",
+  "scripts": {
+    "test": "nightwatch",
+    "test:traditional": "nightwatch --tag traditional",
+    "test:modern": "nightwatch --tag modern",
+    "http-server": "http-server -p 8080"
+  },
+  "keywords": [
+    "select",
+    "dropdown",
+    "filter",
+    "search",
+    "web-component",
+    "custom-element"
+  ],
+  "author": "Omer James Hickman",
+  "license": "LGPL-2.0",
+  "devDependencies": {
+    "@nightwatch/html-reporter-template": "^0.2.0",
+    "chromedriver": "^122.0.0",
+    "geckodriver": "^4.3.0",
+    "http-server": "^14.1.1",
+    "nightwatch": "^3.4.0"
+  }
+}
