@@ -144,7 +144,7 @@
   <div class="demo-section dark-section">
     <h2>Dark Theme</h2>
     
-    <div class="code-example">
+    <div class="code-example" style="color: #000; background-color: #f5f5f5;">
 &lt;filtered-select id="dark-select" theme="FilteredSelectDarkTheme"&gt;
   &lt;select&gt;
     &lt;option value="1"&gt;One&lt;/option&gt;
@@ -351,21 +351,45 @@
   </div>
   
   <script>
-    // Create and apply custom pastel theme
-    const pastelTheme = createFilteredSelectTheme({
-      backgroundColor: '#f9f7f0',
-      textColor: '#5a5a5a',
-      borderColor: '#e8e0d0',
-      hoverBorderColor: '#c9af98',
-      selectedBgColor: '#c9af98',
-      selectedTextColor: '#fff',
-      inputBorderColor: '#e8e0d0',
-      borderRadius: '6px',
-      fontSize: '15px',
-      dropdownShadow: '0 4px 12px rgba(0,0,0,0.08)'
+    // Make sure all themed components have their themes properly set on load
+    window.addEventListener('load', function() {
+      // Set dark theme explicitly
+      const darkSelect = document.getElementById('dark-select');
+      if (darkSelect) {
+        darkSelect.setTheme(FilteredSelectDarkTheme);
+        console.log('Applied dark theme');
+      }
+      
+      // Set rounded theme explicitly
+      const roundedSelect = document.getElementById('rounded-select');
+      if (roundedSelect) {
+        roundedSelect.setTheme(FilteredSelectRoundedTheme);
+        console.log('Applied rounded theme');
+      }
+      
+      // Set grouped dark theme explicitly
+      const groupedDarkSelect = document.getElementById('grouped-dark-select');
+      if (groupedDarkSelect) {
+        groupedDarkSelect.setTheme(FilteredSelectDarkTheme);
+        console.log('Applied dark theme to grouped select');
+      }
+      
+      // Create and apply custom pastel theme
+      const pastelTheme = createFilteredSelectTheme({
+        backgroundColor: '#f9f7f0',
+        textColor: '#5a5a5a',
+        borderColor: '#e8e0d0',
+        hoverBorderColor: '#c9af98',
+        selectedBgColor: '#c9af98',
+        selectedTextColor: '#fff',
+        inputBorderColor: '#e8e0d0',
+        borderRadius: '6px',
+        fontSize: '15px',
+        dropdownShadow: '0 4px 12px rgba(0,0,0,0.08)'
+      });
+      
+      document.getElementById('custom-select').setTheme(pastelTheme);
     });
-    
-    document.getElementById('custom-select').setTheme(pastelTheme);
     
     // Set up event listeners for all selects
     function setupEventListener(selectId, outputId) {
