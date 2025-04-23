@@ -6,20 +6,18 @@
  * Released under the GNU LGPL V2
  */
 
-// Import theme if in CommonJS environment
-let FilteredSelectDefaultTheme;
-let createFilteredSelectTheme;
-
+// Import or use existing themes
 // Check if we're in a module context
 if (typeof require !== 'undefined') {
   const themeModule = require('./template.js');
-  FilteredSelectDefaultTheme = themeModule.FilteredSelectDefaultTheme;
-  createFilteredSelectTheme = themeModule.createFilteredSelectTheme;
-} else {
-  // In browser, these should be globally available
-  // If not defined, we'll use a minimal default theme
-  FilteredSelectDefaultTheme = window.FilteredSelectDefaultTheme || {
-    generateStyles: function() {
+  const { FilteredSelectDefaultTheme: importedDefaultTheme, createFilteredSelectTheme: importedCreateTheme } = themeModule;
+  // Use imported values
+  window.FilteredSelectDefaultTheme = importedDefaultTheme;
+  window.createFilteredSelectTheme = importedCreateTheme;
+} else if (!window.FilteredSelectDefaultTheme) {
+  // In browser, if theme variables aren't globally available, create minimal defaults
+  window.FilteredSelectDefaultTheme = {
+    generateStyles: () => {
       return `
         :host {
           display: block;
@@ -178,9 +176,9 @@ if (typeof require !== 'undefined') {
     }
   };
   
-  createFilteredSelectTheme = window.createFilteredSelectTheme || function(customTheme) {
-    return FilteredSelectDefaultTheme;
-  };
+  window.createFilteredSelectTheme = window.createFilteredSelectTheme || ((customTheme) => {
+    return window.FilteredSelectDefaultTheme;
+  });
 }
 
 class FilteredSelect extends HTMLElement {
@@ -194,7 +192,7 @@ class FilteredSelect extends HTMLElement {
     this.elSelect = null;
     
     // Get theme from attribute or use default
-    this._theme = FilteredSelectDefaultTheme;
+    this._theme = window.FilteredSelectDefaultTheme;
     
     // Bind methods to this
     this.handleDisplayClick = this.handleDisplayClick.bind(this);
@@ -216,14 +214,14 @@ class FilteredSelect extends HTMLElement {
         this._theme = window[theme];
       } else {
         console.warn(`Theme "${theme}" not found. Using default theme.`);
-        this._theme = FilteredSelectDefaultTheme;
+        this._theme = window.FilteredSelectDefaultTheme;
       }
     } else if (typeof theme === 'object') {
       // Custom theme object provided
-      this._theme = createFilteredSelectTheme(theme);
+      this._theme = window.createFilteredSelectTheme(theme);
     } else {
       // Default
-      this._theme = FilteredSelectDefaultTheme;
+      this._theme = window.FilteredSelectDefaultTheme;
     }
     
     // Re-render with new theme
@@ -314,29 +312,84 @@ class FilteredSelect extends HTMLElement {
     this.elResults = this.shadowRoot.querySelector('.select-widget__results');
     this.elClose = this.shadowRoot.querySelector('.select-widget__dropdown-close');
     
-    // Get the slotted select element
-    const slot = this.shadowRoot.querySelector('slot');
-    const slottedElements = slot.assignedElements();
-    
-    if (slottedElements.length > 0) {
-      this.elSelect = slottedElements.find(el => el.tagName === 'SELECT');
-      
-      if (this.elSelect) {
-        // Check for optgroups
-        this.checkForGroups();
-        
-        // Load options data
-        this.loadOptionsData();
-        
-        // Set initial display value if there's a selected option
-        if (this.elSelect.selectedIndex >= 0) {
-          this.elDisplay.innerText = this.elSelect.options[this.elSelect.selectedIndex].text;
-        }
-        
-        // Attach widget reference to the select element
-        this.elSelect.widget = this;
+    // Get the slotted select element - need to allow time for slot assignment
+    setTimeout(() => {
+      const slot = this.shadowRoot.querySelector('slot');
+      if (!slot) {
+        console.error('No slot found in filtered-select');
+        return;
       }
-    }
+      
+      const slottedElements = slot.assignedElements();
+      console.log('Slotted elements:', slottedElements);
+      
+      if (slottedElements.length > 0) {
+        this.elSelect = slottedElements.find(el => el.tagName === 'SELECT');
+        console.log('Found select element:', this.elSelect);
+        
+        if (this.elSelect) {
+          // Check for optgroups
+          this.checkForGroups();
+          
+          // Load options data
+          this.loadOptionsData();
+          
+          // Set initial display value if there's a selected option
+          if (this.elSelect.selectedIndex >= 0) {
+            this.elDisplay.innerText = this.elSelect.options[this.elSelect.selectedIndex].text;
+          }
+          
+          // Attach widget reference to the select element
+          this.elSelect.widget = this;
+        } else {
+          // If no SELECT element found in slot, try finding it directly in children
+          const selectElement = this.querySelector('select');
+          if (selectElement) {
+            console.log('Found select element in children:', selectElement);
+            this.elSelect = selectElement;
+            
+            // Check for optgroups
+            this.checkForGroups();
+            
+            // Load options data
+            this.loadOptionsData();
+            
+            // Set initial display value if there's a selected option
+            if (this.elSelect.selectedIndex >= 0) {
+              this.elDisplay.innerText = this.elSelect.options[this.elSelect.selectedIndex].text;
+            }
+            
+            // Attach widget reference to the select element
+            this.elSelect.widget = this;
+          } else {
+            console.error('No SELECT element found in filtered-select');
+          }
+        }
+      } else {
+        // Try finding select element directly in children if slot is empty
+        const selectElement = this.querySelector('select');
+        if (selectElement) {
+          console.log('Found select element in children:', selectElement);
+          this.elSelect = selectElement;
+          
+          // Check for optgroups
+          this.checkForGroups();
+          
+          // Load options data
+          this.loadOptionsData();
+          
+          // Set initial display value if there's a selected option
+          if (this.elSelect.selectedIndex >= 0) {
+            this.elDisplay.innerText = this.elSelect.options[this.elSelect.selectedIndex].text;
+          }
+          
+          // Attach widget reference to the select element
+          this.elSelect.widget = this;
+        } else {
+          console.error('No content in slot and no SELECT element found in filtered-select');
+        }
+      }
+    }, 0);
   }
 
   checkForGroups() {
@@ -464,6 +517,21 @@ class FilteredSelect extends HTMLElement {
   }
 
   activateDropdown(e) {
+    // Check if select is initialized
+    if (!this.elSelect) {
+      console.error('Cannot activate dropdown: Select element not initialized');
+      // Try to initialize again
+      const selectElement = this.querySelector('select');
+      if (selectElement) {
+        console.log('Found select element on click:', selectElement);
+        this.elSelect = selectElement;
+        this.checkForGroups();
+        this.loadOptionsData();
+      } else {
+        return; // Cannot proceed without select element
+      }
+    }
+    
     this.elWidget.style.display = 'block';
     this.elSearch.value = '';
     this.elSearch.focus();
@@ -479,6 +547,12 @@ class FilteredSelect extends HTMLElement {
   }
 
   buildResults(results) {
+    // Make sure elSelect exists before trying to access it
+    if (!this.elSelect) {
+      console.error('Cannot build results: Select element not initialized');
+      return;
+    }
+    
     if (this.elSelect.selectedIndex >= 0) {
       this.selected = this.elSelect.options[this.elSelect.selectedIndex].value;
     }
