@@ -158,5 +158,226 @@
                 </optgroup>
             </select>
         </div>
+        
+        <hr>
+        <div class="documentation">
+            <h2>Filtered Select Documentation</h2>
+            <div class="readme-content">
+                <h1>Filtered Select</h1>
+                
+                <p>Copyright 2022. Omer James Hickman.<br>
+                Released under the GNU LGPL V2</p>
+                
+                <h2>Overview</h2>
+                
+                <p>Filtered Select is a lightweight JavaScript library that enhances standard HTML select elements with searchable dropdown functionality. It transforms regular select elements into interactive, filterable components that improve user experience, especially for dropdowns with many options.</p>
+                
+                <h2>Features</h2>
+                
+                <ul>
+                    <li><strong>Searchable Dropdowns</strong>: Filter options as you type</li>
+                    <li><strong>Group Support</strong>: Handles <code>&lt;optgroup&gt;</code> elements with proper hierarchical display</li>
+                    <li><strong>Keyboard Navigation</strong>: Close the dropdown with Escape key</li>
+                    <li><strong>Custom Styling</strong>: Fully customizable through CSS</li>
+                    <li><strong>Event Handling</strong>: Preserves original select element events</li>
+                    <li><strong>No Dependencies</strong>: Pure JavaScript with no external libraries required</li>
+                </ul>
+                
+                <h2>Usage</h2>
+                
+                <p>This library is available in two implementations:</p>
+                <ol>
+                    <li>Traditional JavaScript function (original implementation)</li>
+                    <li>Modern ES6 Web Component (custom element)</li>
+                </ol>
+                
+                <h3>Traditional Implementation</h3>
+                
+                <ol>
+                    <li>Include the required files in your HTML:
+                    <pre><code>&lt;script src="filtered_select.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="selctor.css" /&gt;</code></pre>
+                    </li>
+                    
+                    <li>Create a select element wrapped in a container:
+                    <pre><code>&lt;div class="select-container"&gt;
+  &lt;select id="my-select"&gt;
+    &lt;option value="1"&gt;Option 1&lt;/option&gt;
+    &lt;option value="2"&gt;Option 2&lt;/option&gt;
+    &lt;!-- More options... --&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre>
+                    </li>
+                    
+                    <li>Initialize the filtered select:
+                    <pre><code>_filtered_select(document.querySelector(".select-container"));</code></pre>
+                    </li>
+                </ol>
+                
+                <h3>Modern ES6 Custom Element</h3>
+                
+                <ol>
+                    <li>Include the required scripts:
+                    <pre><code>&lt;!-- Include the theme system (optional but recommended) --&gt;
+&lt;script src="template.js"&gt;&lt;/script&gt;
+
+&lt;!-- Include the custom element --&gt;
+&lt;script src="filtered-select-element.js"&gt;&lt;/script&gt;</code></pre>
+                    </li>
+                    
+                    <li>Use the custom element with a slotted select:
+                    <pre><code>&lt;filtered-select&gt;
+  &lt;select id="my-select"&gt;
+    &lt;option value="1"&gt;Option 1&lt;/option&gt;
+    &lt;option value="2"&gt;Option 2&lt;/option&gt;
+    &lt;!-- More options... --&gt;
+  &lt;/select&gt;
+&lt;/filtered-select&gt;</code></pre>
+                    </li>
+                    
+                    <li>Optional: Apply a theme by attribute or JavaScript:
+                    <pre><code>&lt;!-- Using attribute --&gt;
+&lt;filtered-select theme="FilteredSelectDarkTheme"&gt;
+  &lt;select id="my-select"&gt;
+    &lt;!-- Options... --&gt;
+  &lt;/select&gt;
+&lt;/filtered-select&gt;
+
+&lt;!-- Using JavaScript --&gt;
+&lt;script&gt;
+  // Get reference to the element
+  const select = document.querySelector('filtered-select');
+  
+  // Apply a predefined theme
+  select.setTheme(FilteredSelectDarkTheme);
+  
+  // Or create a custom theme
+  select.setTheme(createFilteredSelectTheme({
+    backgroundColor: '#f5f5f5',
+    borderColor: '#0066cc',
+    selectedBgColor: '#0066cc',
+    borderRadius: '4px'
+  }));
+&lt;/script&gt;</code></pre>
+                    </li>
+                </ol>
+                
+                <h2>API</h2>
+                
+                <h3>Traditional Implementation</h3>
+                
+                <h4>Main Function</h4>
+                
+                <pre><code>const widgetController = _filtered_select(containerElement);</code></pre>
+                
+                <h4>Methods</h4>
+                
+                <ul>
+                    <li><code>widgetController.reload()</code>: Reloads the options from the select element (useful after dynamically changing options)</li>
+                </ul>
+                
+                <h3>Modern ES6 Custom Element</h3>
+                
+                <h4>Methods</h4>
+                
+                <ul>
+                    <li><code>filteredSelectElement.reload()</code>: Reloads the options from the select element (useful after dynamically changing options)</li>
+                    <li><code>filteredSelectElement.setTheme(theme)</code>: Sets the theme for the component. Can accept a theme name, a theme object, or a custom theme object.</li>
+                </ul>
+                
+                <h4>Attributes</h4>
+                
+                <ul>
+                    <li><code>theme</code>: Sets the name of a predefined theme to use (e.g., "FilteredSelectDarkTheme")</li>
+                    <li><code>placeholder</code>: Sets the placeholder text for the search input (default: "Search...")</li>
+                    <li><code>disabled</code>: When present, disables the select dropdown</li>
+                </ul>
+                
+                <h3>Theming System</h3>
+                
+                <p>The modern implementation includes a powerful theming system that allows complete customization of the component's appearance.</p>
+                
+                <h4>Predefined Themes</h4>
+                
+                <ul>
+                    <li><code>FilteredSelectDefaultTheme</code>: The default light theme</li>
+                    <li><code>FilteredSelectDarkTheme</code>: A dark theme with light text</li>
+                    <li><code>FilteredSelectRoundedTheme</code>: A theme with rounded corners and blue accents</li>
+                </ul>
+                
+                <h2>Testing</h2>
+                
+                <p>This project includes comprehensive test coverage for both implementations using NightwatchJS.</p>
+                
+                <h3>Setup</h3>
+                
+                <pre><code># Install dependencies
+npm install
+
+# Start the HTTP server in a separate terminal
+npm run http-server</code></pre>
+                
+                <h3>Running Tests</h3>
+                
+                <pre><code># Run all tests
+npm test
+
+# Run only traditional implementation tests
+npm run test:traditional
+
+# Run only modern implementation tests
+npm run test:modern</code></pre>
+                
+                <h2>Browser Compatibility</h2>
+                
+                <ul>
+                    <li>Traditional Implementation: Compatible with all modern browsers</li>
+                    <li>Modern ES6 Custom Element: Compatible with browsers that support Web Components (all modern browsers, may require polyfills for older browsers)</li>
+                </ul>
+                
+                <h2>License</h2>
+                
+                <p>GNU LGPL V2</p>
+            </div>
+        </div>
+
+        <style>
+            .documentation {
+                margin-top: 30px;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 5px;
+                border-left: 4px solid #0066cc;
+            }
+            
+            .readme-content {
+                line-height: 1.6;
+            }
+            
+            .readme-content h1,
+            .readme-content h2 {
+                border-bottom: 1px solid #eee;
+                padding-bottom: 5px;
+            }
+            
+            .readme-content code {
+                background-color: #f0f0f0;
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-family: monospace;
+            }
+            
+            .readme-content pre {
+                background-color: #f5f5f5;
+                padding: 15px;
+                border-radius: 5px;
+                overflow-x: auto;
+            }
+            
+            .readme-content pre code {
+                background-color: transparent;
+                padding: 0;
+            }
+        </style>
     </body>
 </html>
