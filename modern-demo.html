@@ -223,6 +223,36 @@
     
     <div id="dynamic-select-output">Selected: None</div>
   </div>
+
+  <div class="demo-section">
+    <h2>Disabled Select</h2>
+    
+    <div class="code-example">
+&lt;filtered-select disabled&gt;
+  &lt;select id="disabled-select"&gt;
+    &lt;option value="1"&gt;One&lt;/option&gt;
+    &lt;option value="2"&gt;Two&lt;/option&gt;
+    &lt;option value="3"&gt;Three&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/filtered-select&gt;
+
+&lt;button id="toggle-disabled-btn"&gt;Toggle Disabled State&lt;/button&gt;
+
+&lt;!-- Toggle functionality implemented in main script below --&gt;
+    </div>
+    
+    <filtered-select id="disabled-select-container" disabled>
+      <select id="disabled-select">
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </filtered-select>
+    
+    <button id="toggle-disabled-btn">Toggle Disabled State</button>
+    
+    <div id="disabled-select-output">Selected: None</div>
+  </div>
   
   <script>
     // Setup event listeners for the demos
@@ -238,6 +268,11 @@
     
     document.getElementById('dynamic-select').addEventListener('change', function(e) {
       document.getElementById('dynamic-select-output').textContent = 
+        'Selected: ' + e.target.options[e.target.selectedIndex].text;
+    });
+    
+    document.getElementById('disabled-select').addEventListener('change', function(e) {
+      document.getElementById('disabled-select-output').textContent = 
         'Selected: ' + e.target.options[e.target.selectedIndex].text;
     });
     
@@ -276,6 +311,13 @@
       }
     });
     
+    // Implementation for toggling disabled state
+    document.getElementById('toggle-disabled-btn').addEventListener('click', function() {
+      const select = document.getElementById('disabled-select-container');
+      select.toggleAttribute('disabled');
+      console.log('Toggled disabled state:', select.hasAttribute('disabled'));
+    });
+    
     // Set initial values for selected outputs
     window.addEventListener('load', function() {
       const basicSelect = document.getElementById('basic-select');
@@ -294,6 +336,12 @@
       if (dynamicSelect.selectedIndex >= 0) {
         document.getElementById('dynamic-select-output').textContent = 
           'Selected: ' + dynamicSelect.options[dynamicSelect.selectedIndex].text;
+      }
+      
+      const disabledSelect = document.getElementById('disabled-select');
+      if (disabledSelect.selectedIndex >= 0) {
+        document.getElementById('disabled-select-output').textContent = 
+          'Selected: ' + disabledSelect.options[disabledSelect.selectedIndex].text;
       }
     });
   </script>
