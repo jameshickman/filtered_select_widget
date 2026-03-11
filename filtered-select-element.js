@@ -532,6 +532,7 @@ class FilteredSelect extends HTMLElement {
       }
     }
     
+    this.style.zIndex = '99999';
     this.elWidget.style.display = 'block';
     this.elSearch.value = '';
     this.elSearch.focus();
@@ -542,6 +543,7 @@ class FilteredSelect extends HTMLElement {
   }
 
   closeDropdown() {
+    this.style.zIndex = '';
     this.elWidget.style.display = 'none';
     this.opened = false;
   }
